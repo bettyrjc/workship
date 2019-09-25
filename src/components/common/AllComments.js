@@ -33,11 +33,11 @@ import { deleteComment } from '../../actions/commentsAction';
                     style= {{cursor: 'pointer', color:'blue'}}
                     onClick={this.onDeleteClick.bind(this, id)}
                 >delete</i>
-                <Link to={`comentarios/editar/${id}`}> 
+                <Link to={`comentarios/${id}`}> 
                   <i className="material-icons" style={{
-                    color: 'black'
+                    color: 'blue'
                   }}
-                  >edit</i>
+                  >add</i>
                 </Link>
               </div>
             </div>

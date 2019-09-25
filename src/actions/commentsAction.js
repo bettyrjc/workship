@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {
   GET_COMMENTS,
   GET_COMMENT,
@@ -5,7 +6,6 @@ import {
   DELETE_COMMENT,
   UPDATE_COMMENT
 } from './types';
-import axios from 'axios';
 // dispatch : es parte de nuestro state.
 
 export const getComments= ()=> async dispatch =>{
@@ -24,7 +24,7 @@ export const getComment = id => async dispatch =>{
 }
 export const deleteComment = id => async dispatch => {
   try {
-    await axios.delete(`https://jsonplaceholder.typicode.com/comments/${id}`);
+    await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
     dispatch({
       type: DELETE_COMMENT,
       payload: id
@@ -53,6 +53,7 @@ export const updateComment = comment => async dispatch => {
     `https://jsonplaceholder.typicode.com/comments/${comment.id}`,
     comment
   );
+  
   dispatch({
     type: UPDATE_COMMENT,
     payload: res.data

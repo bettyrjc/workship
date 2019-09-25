@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import Input from '../common/input'
-import {getUser, updateUser} from '../../actions/userAction'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Header from '../layout/header';
 import Footer from '../layout/footer';
+import {getUser, updateUser} from '../../actions/userAction'
+import {
+  initMaterialComponents,
+  removeMaterialComponents
+} from "../../help/functional";
 
 class EditUser extends Component {
   state = {
@@ -16,6 +20,20 @@ class EditUser extends Component {
     username:'',
     errors:{}
   };
+  componentDidMount() {
+    initMaterialComponents();
+    const { id } = this.props.match.params;
+    this.props.getUser(id);
+  }
+  componentWillUnmount() {
+    removeMaterialComponents();
+  }
+  componentWillReceiveProps(nextProps){
+    const {name, phone, email, username,website} = nextProps.user;
+    this.setState({
+      name,email,phone,username, website
+    });
+  }
   onSubmit = e => {
     e.preventDefault();
 
@@ -66,20 +84,13 @@ class EditUser extends Component {
       phone: '',
       errors: {}
     });
+      // this.props.history.push(`/usuarios/${id}`);
+    
+      this.props.history.push('/usuarios');
+    }
+  
 
-    this.props.history.push('/usuarios');
-  };
-
-  componentWillReceiveProps(nextProps){
-    const {name, phone, email, username,website} = nextProps.user;
-    this.setState({
-      name,email,phone,username, website
-    });
-  }
-  componentDidMount() {
-    const { id } = this.props.match.params;
-    this.props.getUser(id);
-  }
+ 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
 
@@ -95,45 +106,50 @@ class EditUser extends Component {
           <div className="card-content">
           <form onSubmit={this.onSubmit}>
             <Input
+              id="name"
               label="Name"
-              name="name"
               value={name}
+              active_label={true}
               onChange={this.onChange}
               error={errors.name}
             />
              <Input
+              id="username"
               label="Username"
-              name="username"
               value={username}
+              active_label={true}
               onChange={this.onChange}
               error={errors.username}
             />
              <Input
+              id="email"
               label="Correo"
-              name="email"
               value={email}
               type="email"
+              active_label={true}
               onChange={this.onChange}
               error={errors.email}
             />
              <Input
+              id="phone"
               label="Telefono"
-              name="phone"
               value={phone}
+              active_label={true}
               onChange={this.onChange}
               error={errors.phone}
             />
              <Input
+             id="website"
               label="Web Site"
-              name="website"
               value={website}
+              active_label={true}
               onChange={this.onChange}
               error={errors.name}
             />
             <input
               type="submit"
               value="Update Contact"
-              className="btn btn-light btn-block"
+              className="btn btn-light btn-block indigo"
             />
           </form>
           </div>

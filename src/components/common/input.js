@@ -1,31 +1,48 @@
 import React from 'react'
 import PropTypes from 'prop-types';
  const input = ({
+   id,
    label,
-   name,
    value,
    type,
    onChange,
-   error
+   error,
+   active_label, 
+   placeholder
  })=> {
   return (
-    <div className="row">
-      <form className="col s12">
-          <div className="row">
-            <div className="input-field col s12">
+     <div className="row">
+       {
+         active_label  || placeholder ? (
+          <div className="input-field col s12">
               <input 
+              id={id}
               type={type}
-              name={name}
+              name={id}
               value={value}
               onChange={onChange}
+              placeholder={placeholder ? placeholder : ""}
               className="validate"/>
-              <label htmlFor={name}>{label}</label>
+             
             </div>
-            {error && <div className="invalid-feedback">{error}</div>}
-          </div>
-      </form>
-     </div>
-  )
+         ) :(
+          <div className="input-field col s12">
+          <input 
+          type={type}
+          name={id}
+          value={value}
+          onChange={onChange}
+          className="validate"/>
+        </div>
+         )}
+      <label htmlFor={id} className={`${active_label && "active"} left`}>
+        {label}
+      </label>
+
+      {error && <span className="helper-text text-danger">{error}</span>}  
+      </div>
+        )
+
 }
 input.propType = {
   label: PropTypes.string.isRequired,
@@ -33,9 +50,15 @@ input.propType = {
   value: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  active_label: PropTypes.bool.isRequired,
+  placeholder: PropTypes.string
+
 }
 input.defaultProps = {
-  type: 'text'
+  type: 'text',
+  active_label: false,
+  error: null,
+  placeholder: null
 };
 export default input;
