@@ -3,6 +3,7 @@ import Input from '../common/input'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Spinner from '../common/loaders'
 import Header from '../layout/header';
 import Footer from '../layout/footer';
 import {getUser, updateUser} from '../../actions/userAction'
@@ -35,6 +36,7 @@ class EditUser extends Component {
     });
   }
   onSubmit = e => {
+    if (this.props.user.loading) return;
     e.preventDefault();
 
     const { name, email, phone,website,username } = this.state;
@@ -84,8 +86,6 @@ class EditUser extends Component {
       phone: '',
       errors: {}
     });
-      // this.props.history.push(`/usuarios/${id}`);
-    
       this.props.history.push('/usuarios');
     }
   
@@ -102,6 +102,7 @@ class EditUser extends Component {
         <div className="card col s12">
           <div className="card-title">
             Formulario
+            {this.props.user.loading && <Spinner />}
           </div>
           <div className="card-content">
           <form onSubmit={this.onSubmit}>
@@ -152,6 +153,7 @@ class EditUser extends Component {
               className="btn btn-light btn-block indigo"
             />
           </form>
+          
           </div>
         </div>
         <Footer/>

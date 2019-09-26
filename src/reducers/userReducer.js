@@ -3,16 +3,31 @@ import {
     GET_USER,
     DELETE_USER,
     ADD_USER,
-    UPDATE_USER
+    UPDATE_USER,
+    USER_LOADING,
+    USER_END_LOADING,
+    USER_RESET_DATA
 } from '../actions/types';
 
 const initialState = {
+    loading: false,
     users: [],
     user:{}
 }
 // payload: es la data que quieres pasar a tu action
 export default function (state = initialState, action){
     switch (action.type){
+        case USER_LOADING:
+            return {
+              ...state,
+              loading: true
+            };
+      
+          case USER_END_LOADING:
+            return {
+              ...state,
+              loading: false
+            };
         case GET_USERS:
             return {
                 ...state,
@@ -45,6 +60,13 @@ export default function (state = initialState, action){
                       : user  
                 )
             };
+            case USER_RESET_DATA:
+                return {
+                  ...state,
+                  loading: false,
+                  users: [],
+                  user: {}
+                };
         default:
             return state;
     }
