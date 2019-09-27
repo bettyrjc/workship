@@ -12,6 +12,7 @@ import {
   initMaterialComponents,
   removeMaterialComponents
 } from "../../help/functional";
+import Spinner from '../common/loaders'
 
 class Comment extends Component {
 
@@ -25,20 +26,23 @@ class Comment extends Component {
     removeMaterialComponents();
   }
   render() {
-    const { comment } = this.props;
-
-    return (
-      <React.Fragment>
-        <Header  name_pag="Comentario"/>
-        <div className="row">
-          <Link to={`/comentarios/edit/${this.props.match.params.id}`}> 
-            <i className="material-icons" style={{ color: 'black' }}>edit</i>
-          </Link>
-          <CommentOne comment={comment} />
-        </div>
-        <Footer/>
-      </React.Fragment>
-    )
+    const { comment,loading } = this.props;
+    if(loading){
+      return <Spinner/>
+    }else{
+      return (
+        <React.Fragment>
+          <Header  name_pag="Comentario"/>
+          <div className="row">
+            <Link to={`/comentarios/edit/${this.props.match.params.id}`}> 
+              <i className="material-icons" style={{ color: 'black' }}>edit</i>
+            </Link>
+            <CommentOne comment={comment} />
+          </div>
+          <Footer/>
+        </React.Fragment>
+      )
+    }
   }
 }
 Comment.propTypes = {
@@ -46,7 +50,8 @@ Comment.propTypes = {
   getComment: PropTypes.func.isRequired
 }
 const mapStateToProps = state => ({
-  comment: state.comment.comment
+  comment: state.comment.comment,
+  loading: state.comment.loading
 });
 
 export default connect(

@@ -12,20 +12,33 @@ import axios from 'axios';
 // dispatch : es parte de nuestro state.
 
 export const getUsers = ()=> async dispatch =>{
-  
-  const res = await axios.get('https://jsonplaceholder.typicode.com/users')
-  dispatch({
-    type:GET_USERS,
-    payload: res.data
-  })
+  UserLoading(dispatch);
+  try{
+   const res = await axios.get(`https://jsonplaceholder.typicode.com/users`)
+   dispatch({
+     type:GET_USERS,
+     payload: res.data
+   })
+   removeUserLoading(dispatch);
+  } catch(err){
+    console.log(err)
+    removeUserLoading(dispatch);
+  }
 }
 export const getUser = id => async dispatch =>{
- 
+  UserLoading(dispatch);
+ try{
   const res = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
   dispatch({
     type:GET_USER,
     payload: res.data
   })
+  removeUserLoading(dispatch);
+ } catch(err){
+   console.log(err)
+   removeUserLoading(dispatch);
+ }
+ 
 }
 export const deleteUser = id => async dispatch => {
  
@@ -56,11 +69,11 @@ export const addContact = contact => async dispatch => {
   });
 };
 
-export const updateUser = user => async dispatch => {
+export const updateUser = (id,user, history) => async dispatch => {
   UserLoading(dispatch);
   try{
     const res = await axios.put(
-      `https://jsonplaceholder.typicode.com/users/${user.id}`,
+      `https://jsonplaceholder.typicode.com/users/${id}`,
       user
     );
     dispatch({
@@ -68,6 +81,7 @@ export const updateUser = user => async dispatch => {
       payload: res.data
     });
     removeUserLoading(dispatch);
+    history.push('/usuarios');
   }catch(err){
     removeUserLoading(dispatch);
     console.log('error')
@@ -75,6 +89,7 @@ export const updateUser = user => async dispatch => {
 };
 
 export const UserLoading = dispatch => {
+  
   dispatch({
     type: USER_LOADING
   });

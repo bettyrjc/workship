@@ -37,7 +37,8 @@ import { deleteComment } from '../../actions/commentsAction';
                   <i className="material-icons" style={{
                     color: 'blue'
                   }}
-                  >add</i>
+                  >keyboard_arrow_down
+                  </i>
                 </Link>
               </div>
             </div>

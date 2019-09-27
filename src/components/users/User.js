@@ -6,6 +6,7 @@ import { getUser} from '../../actions/userAction'
 import Header from '../layout/header';
 import Footer from '../layout/footer';
 import UserOne from '../common/showOneUser'
+import Spinner from '../common/loaders'
 
 import {
   initMaterialComponents,
@@ -21,16 +22,21 @@ class UserPrivate extends Component {
     removeMaterialComponents();
   }
   render() {
-    const { user } = this.props;
-    return (
+    const { user,loading  } = this.props;
+    if(loading){
+      return <Spinner/>
+    }else{
+       return (
       <React.Fragment>
         <Header  name_pag="Usuario"/>
         <div className="row">
-          <UserOne user={user} />
+          <UserOne user={user} loading={loading} />
         </div>
       <Footer/>
       </React.Fragment>
     )
+    }
+   
   }
 }
 UserPrivate.propTypes = {
@@ -38,7 +44,8 @@ UserPrivate.propTypes = {
   getUser: PropTypes.func.isRequired
 }
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user.user,
+  loading: state.user.loading
 });
 
 export default connect(

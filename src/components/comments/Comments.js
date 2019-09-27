@@ -12,6 +12,7 @@ import Comment from '../common/AllComments';
 import { getComments} from '../../actions/commentsAction'
 import Header from '../layout/header';
 import Footer from '../layout/footer';
+import Spinner from '../common/loaders';
 
  class Comments extends Component {
    
@@ -25,32 +26,36 @@ import Footer from '../layout/footer';
   }
  
   render() {
-    const {comments} = this.props;
-    return (
-      <React.Fragment>
-        <Header name_pag="Comentarios"/>
-          <div className="container">
-            <div className="card">
-            <div className="card-image">
-              <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F450591688688295936%2FYGTW_6aA.jpeg&f=1&nofb=1" alt="Img"/>
-              <Link to="/añadir_comentarios"
-                className="btn-floating halfway-fab waves-effect waves-light black">
-               Hola
-                {/* <i className="material-icons">add</i> */}
-              </Link>
-            </div>
-                <div className="col s12">
-                { comments.map(
-                  comment =>( 
-                  <Comment key={comment.id} comment={comment}/>)
-                  )
-                 }
-                </div>
+    const {comments, loading} = this.props;
+    if(loading){
+      return <Spinner/>
+    }else{
+      return (
+        <React.Fragment>
+          <Header name_pag="Comentarios"/>
+            <div className="container">
+              <div className="card">
+              <div className="card-image">
+                <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fpbs.twimg.com%2Fprofile_images%2F450591688688295936%2FYGTW_6aA.jpeg&f=1&nofb=1" alt="Img"/>
+                <Link to="/añadir_comentarios"
+                  className="btn-floating halfway-fab waves-effect waves-light black">
+                 
+                  <i className="material-icons">add</i>
+                </Link>
               </div>
-          </div>
-        <Footer/>
-      </React.Fragment>
-    )
+                  <div className="col s12">
+                  { comments.map(
+                    comment =>( 
+                    <Comment key={comment.id} comment={comment}/>)
+                    )
+                   }
+                  </div>
+                </div>
+            </div>
+          <Footer/>
+        </React.Fragment>
+      )
+    }
   }
 };
 
@@ -60,7 +65,8 @@ Comments.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    comments: state.comment.comments
+    comments: state.comment.comments,
+    loading: state.comment.loading
   });
   
   export default connect(

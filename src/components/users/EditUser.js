@@ -36,7 +36,7 @@ class EditUser extends Component {
     });
   }
   onSubmit = e => {
-    if (this.props.user.loading) return;
+    // if (this.props.user.loading) return;
     e.preventDefault();
 
     const { name, email, phone,website,username } = this.state;
@@ -69,7 +69,6 @@ class EditUser extends Component {
     const { id } = this.props.match.params;
 
     const updUser = {
-      id,
       name,
       email,
       phone,
@@ -77,7 +76,7 @@ class EditUser extends Component {
       username
     };
 
-    this.props.updateUser(updUser);
+    this.props.updateUser(id, updUser, this.props.history);
 
     // Clear State
     this.setState({
@@ -86,7 +85,7 @@ class EditUser extends Component {
       phone: '',
       errors: {}
     });
-      this.props.history.push('/usuarios');
+      
     }
   
 
@@ -95,6 +94,7 @@ class EditUser extends Component {
 
 
   render() {
+   
     const { name, email, phone, username, website, errors} = this.state;
     return (
       <React.Fragment>
@@ -102,7 +102,7 @@ class EditUser extends Component {
         <div className="card col s12">
           <div className="card-title">
             Formulario
-            {this.props.user.loading && <Spinner />}
+            
           </div>
           <div className="card-content">
           <form onSubmit={this.onSubmit}>
@@ -123,7 +123,7 @@ class EditUser extends Component {
               error={errors.username}
             />
              <Input
-              id="email"
+              id="emailthis.props.loading"
               label="Correo"
               value={email}
               type="email"
@@ -153,7 +153,7 @@ class EditUser extends Component {
               className="btn btn-light btn-block indigo"
             />
           </form>
-          
+          {this.props.loading && <Spinner />}
           </div>
         </div>
         <Footer/>
@@ -167,7 +167,8 @@ EditUser.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user.user,
+  loading: state.user.loading
 });
 
 export default connect(

@@ -5,6 +5,7 @@ import {
   initMaterialComponents,
   removeMaterialComponents
 } from "../../help/functional";
+import Spinner from '../common/loaders'
 import Header from '../layout/header';
 import Footer from '../layout/footer';
 import Input from '../common/input' 
@@ -49,11 +50,9 @@ class NewComment extends Component {
                     email
                   };
 
-    this.props.addComment(newCom);
+    this.props.addComment(newCom, this.props.history);
   // Limpiar luego del state
     this.setState({body:'', name:'', email:'', errors:{}})
-  // enviarlo 
-    this.props.history.push('/comentarios')
   }
 
   onChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -63,7 +62,7 @@ class NewComment extends Component {
            name, 
            email,
            errors
-        } = this.state;
+          } = this.state;
     return (
       <React.Fragment>
         <Header/>
@@ -94,6 +93,7 @@ class NewComment extends Component {
                   error={errors.email}
                 />
               </form>
+              {this.props.loading && <Spinner />}
               <button onClick={this.onSubmitComments} className="btn indigo">Agregar</button>
             </div>
           </div>   
@@ -106,8 +106,11 @@ class NewComment extends Component {
 NewComment.propTypes={
   addComment: PropTypes.func.isRequired
 }
+const mapStateToProps = state => ({
+  loading: state.comment.loading
+});
 
 export default connect(
-  null,
+  mapStateToProps,
   { addComment }
 )(NewComment);

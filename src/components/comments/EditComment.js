@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Input from '../common/input'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+import Spinner from '../common/loaders'
 import Header from '../layout/header';
 import Footer from '../layout/footer';
 import {getComment, updateComment} from '../../actions/commentsAction'
@@ -58,13 +58,14 @@ class EditComment extends Component {
     const { id } = this.props.match.params;
 
     const updComentario = {
-      id,
       name,
       email,
      body
     };
 
-    this.props.updateUser(updComentario);
+    this.props.updateComment(id,
+                             updComentario,
+                             this.props.history);
 
     // Clear State
     this.setState({
@@ -73,9 +74,6 @@ class EditComment extends Component {
       body: '',
       errors: {}
     });
-      // this.props.history.push(`/usuarios/${id}`);
-    
-      this.props.history.push('/comentarios');
     }
   
 
@@ -126,6 +124,8 @@ class EditComment extends Component {
               className="btn btn-light btn-block indigo"
             />
           </form>
+          {this.props.loading && <Spinner />}
+
           </div>
         </div>
         <Footer/>
@@ -139,7 +139,8 @@ EditComment.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  comment: state.comment.comment
+  comment: state.comment.comment,
+  loading: state.comment.loading
 });
 
 export default connect(
