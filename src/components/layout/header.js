@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
       <ul className="right hide-on-med-and-down">
         <li><Link to="/usuarios">Trabajadores</Link></li>
         <li><Link to="/comentarios">Comentarios</Link></li>
-        <li><Link to="collapsible.html">Fotos</Link></li>
         <li><Link to="mobile.html">Inicio</Link></li>
       </ul>
     </div>
@@ -22,7 +21,6 @@ import { Link } from 'react-router-dom';
   <ul className="sidenav" id="mobile-demo">
     <li><Link to="/usuarios">Trabajadores</Link></li>
     <li><Link to="/comentarios">Comentarios</Link></li>
-    <li><Link to="collapsible.html">Fotos</Link></li>
     <li><Link to="mobile.html">Inicio</Link></li>
   </ul>
 </div>
