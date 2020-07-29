@@ -1,23 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import Header from '../layout/header';
-import Footer from '../layout/footer';
-import CommentOne from '../common/showOneComment'
-import { connect } from 'react-redux';
+import { Link, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
+import Header from "../layout/header";
+import Footer from "../layout/footer";
+import CommentOne from "../common/showOneComment";
+import { connect } from "react-redux";
 
-import { getComment} from '../../actions/commentsAction'
+import { getComment } from "../../actions/commentsAction";
 import {
   initMaterialComponents,
-  removeMaterialComponents
+  removeMaterialComponents,
 } from "../../help/functional";
-import Spinner from '../common/loaders'
-
+import Spinner from "../common/loaders";
+// const history = useHistory();
 class Comment extends Component {
-
-  componentDidMount(){
-    initMaterialComponents(); 
+  componentDidMount() {
+    initMaterialComponents();
     const { id } = this.props.match.params;
     this.props.getComment(id);
   }
@@ -25,37 +24,39 @@ class Comment extends Component {
   componentWillUnmount() {
     removeMaterialComponents();
   }
+
+  redirrecionar = () => {
+    this.props.history.push(`/comentarios/edit/${this.props.match.params.id}`);
+  };
   render() {
-    const { comment,loading } = this.props;
-    if(loading){
-      return <Spinner/>
-    }else{
+    const { comment, loading } = this.props;
+    if (loading) {
+      return <Spinner />;
+    } else {
       return (
         <React.Fragment>
-          <Header  name_pag="Comentario"/>
+          <Header name_pag="Comentario" />
           <div className="row">
-            <Link to={`/comentarios/edit/${this.props.match.params.id}`}> 
-              <i className="material-icons" style={{ color: 'black' }}>edit</i>
-            </Link>
+            <button onClick={() => this.redirrecionar(comment.id)}>
+              <i className="material-icons" style={{ color: "black" }}>
+                edit
+              </i>
+            </button>
             <CommentOne comment={comment} />
           </div>
-          <Footer/>
+          <Footer />
         </React.Fragment>
-      )
+      );
     }
   }
 }
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
-  getComment: PropTypes.func.isRequired
-}
-const mapStateToProps = state => ({
+  getComment: PropTypes.func.isRequired,
+};
+const mapStateToProps = (state) => ({
   comment: state.comment.comment,
-  loading: state.comment.loading
+  loading: state.comment.loading,
 });
 
-export default connect(
-  mapStateToProps,
-  { getComment }
-)(Comment);
-
+export default connect(mapStateToProps, { getComment })(Comment);

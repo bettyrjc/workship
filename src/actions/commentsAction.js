@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   GET_COMMENTS,
   GET_COMMENT,
@@ -6,102 +6,103 @@ import {
   DELETE_COMMENT,
   LOADING,
   END_LOADING,
-  UPDATE_COMMENT
-} from './types';
+  UPDATE_COMMENT,
+} from "./types";
 // dispatch : es parte de nuestro state.
 
-export const getComments= ()=> async dispatch =>{
+export const getComments = () => async (dispatch) => {
   Loading(dispatch);
-  try{
-    const res = await axios.get(`https://jsonplaceholder.typicode.com/comments`)
+  try {
+    const res = await axios.get(
+      `https://jsonplaceholder.typicode.com/comments`
+    );
     dispatch({
-      type:GET_COMMENTS,
-      payload: res.data
-    })
+      type: GET_COMMENTS,
+      payload: res.data,
+    });
     removeLoading(dispatch);
-  }
-  catch(err){
+  } catch (err) {
     removeLoading(dispatch);
-    console.log('error')
+    console.log("error");
   }
-}
-export const getComment = id => async dispatch =>{
+};
+export const getComment = (id) => async (dispatch) => {
   Loading(dispatch);
-  try{
-    const res = await axios.get(`https://jsonplaceholder.typicode.com/comments/${id}`)
+  try {
+    const res = await axios.get(
+      `https://jsonplaceholder.typicode.com/comments/${id}`
+    );
     dispatch({
-      type:GET_COMMENT,
-      payload: res.data
-    })
+      type: GET_COMMENT,
+      payload: res.data,
+    });
     removeLoading(dispatch);
-  }
-  catch(err){
+  } catch (err) {
     removeLoading(dispatch);
-    console.log('errotr')
+    console.log(err);
   }
-}
-export const deleteComment = id => async dispatch => {
+};
+export const deleteComment = (id) => async (dispatch) => {
   try {
     await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`);
     dispatch({
       type: DELETE_COMMENT,
-      payload: id
+      payload: id,
     });
   } catch (e) {
     dispatch({
       type: DELETE_COMMENT,
-      payload: id
+      payload: id,
     });
   }
 };
 
-export const addComment = (comment, history) => async dispatch => {
+export const addComment = (comment, history) => async (dispatch) => {
   Loading(dispatch);
-  try{
+  try {
     const res = await axios.post(
-      'https://jsonplaceholder.typicode.com/comments',
+      "https://jsonplaceholder.typicode.com/comments",
       comment
     );
     dispatch({
       type: ADD_COMMENT,
-      payload: res.data
+      payload: res.data,
     });
     removeLoading(dispatch);
-    history.push('/comentarios')
-  }catch{
+    history.push("/comentarios");
+  } catch {
     removeLoading(dispatch);
-    console.log('error')
+    console.log("error");
   }
 };
 
-export const updateComment = (id,comment, history) => async dispatch => {
+export const updateComment = (id, comment, history) => async (dispatch) => {
   Loading(dispatch);
-  try{
+  try {
     const res = await axios.put(
       `https://jsonplaceholder.typicode.com/comments/${id}`,
       comment
     );
     dispatch({
       type: UPDATE_COMMENT,
-      payload: res.data
+      payload: res.data,
     });
     removeLoading(dispatch);
-    history.push('/comentarios')
-  }catch(err){
+    history.push("/comentarios");
+  } catch (err) {
     removeLoading(dispatch);
-    console.log('error')
+    console.log("error");
   }
 };
-// helper 
-export const Loading = dispatch => {
-  
+// helper
+export const Loading = (dispatch) => {
   dispatch({
-    type: LOADING
+    type: LOADING,
   });
 };
 
-export const removeLoading = dispatch => {
+export const removeLoading = (dispatch) => {
   dispatch({
-    type: END_LOADING
+    type: END_LOADING,
   });
 };

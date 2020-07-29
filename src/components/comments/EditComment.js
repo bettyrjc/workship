@@ -1,149 +1,102 @@
-import React, { Component } from 'react'
-import Input from '../common/input'
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Spinner from '../common/loaders'
-import Header from '../layout/header';
-import Footer from '../layout/footer';
-import {getComment, updateComment} from '../../actions/commentsAction'
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+// import { useForm } from "react-hook-form";
+// import Input from "../common/input";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import Spinner from "../common/loaders";
+import Header from "../layout/header";
+import Footer from "../layout/footer";
+import { getComment, updateComment } from "../../actions/commentsAction";
 import {
   initMaterialComponents,
-  removeMaterialComponents
+  // removeMaterialComponents,
 } from "../../help/functional";
 
-class EditComment extends Component {
-  state = {
-    name: 'hola',
-    email:'comentario',
-    body: 'fjlhjdflkajsñldhosaidñios',
-    errors:{}
-  };
-  componentDidMount() {
+const EditComment = ({
+  loading,
+  getComment,
+  match,
+  comment,
+  history,
+  updateComment,
+}) => {
+  // const user = useSelector((state) => state.comment.comment);
+
+  useEffect(() => {
     initMaterialComponents();
-    const { id } = this.props.match.params;
-    this.props.getComment(id);
-  }
-  componentWillUnmount() {
-    removeMaterialComponents();
-  }
-  componentWillReceiveProps(nextProps){
-    const {name,  email, body} = nextProps.comment;
-    this.setState({
-      name,email,body
-    });
-  }
-  onSubmit = e => {
+    getComment(match.params.id);
+  }, []);
+
+  const [values, setValues] = useState(comment);
+
+  const onChange = (event) => {
+    let { name, value } = event.target;
+    Validator(name, value, formErrors, setFormErrors, setDisabledButton);
+    setValues({ ...values, [name]: value });
+  };
+
+  // actualizar el estado
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    const { name, email,body } = this.state;
-
-    // Check For Errors
-    if (name === '') {
-      this.setState({ errors: { name: 'Name is required' } });
-      return;
-    }
-
-    if (email === '') {
-      this.setState({ errors: { email: 'Email is required' } });
-      return;
-    }
-
-    if (body === '') {
-      this.setState({ errors: { body: 'Phone is required' } });
-      return;
-    }
-  
-
-
-    const { id } = this.props.match.params;
-
-    const updComentario = {
-      name,
-      email,
-     body
-    };
-
-    this.props.updateComment(id,
-                             updComentario,
-                             this.props.history);
-
-    // Clear State
-    this.setState({
-      name: '',
-      email: '',
-      body: '',
-      errors: {}
-    });
-    }
-  
-
- 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-
-  render() {
-    const { name, email, body, errors} = this.state;
-    return (
-      <React.Fragment>
-        <Header name_pag="Editar Usuarios"/>
-        <div className="card col s12">
-          <div className="card-title">
-            Formulario
-          </div>
-          <div className="card-content">
-          <form onSubmit={this.onSubmit}>
-            <Input
+    const { id } = match.params;
+    const { body, name, email } = values;
+    console.log({ body, name, email });
+    updateComment(id, { body, name, email }, history);
+  };
+  return (
+    <React.Fragment>
+      <Header name_pag="Editar Usuarios" />
+      <div className="card col s12">
+        <div className="card-title">Formulario</div>
+        <div className="card-content">
+          <form onSubmit={handleSubmit}>
+            <input
               id="name"
+              name="name"
               label="Name"
-              value={name}
-              active_label={true}
-              onChange={this.onChange}
-              error={errors.name}
+              value={values.name}
+              onChange={onChange}
             />
-             <Input
+            <input
+              name="email"
               id="email"
               label="Correo"
-              value={email}
+              value={values.email}
               type="email"
-              active_label={true}
-              onChange={this.onChange}
-              error={errors.email}
+              onChange={onChange}
             />
-             <Input
+            <input
+              name="body"
               id="body"
               label="Comentario"
-              value={body}
-              active_label={true}
-              onChange={this.onChange}
-              error={errors.body}
+              value={values.body}
+              onChange={onChange}
             />
-             
+
             <input
               type="submit"
               value="Update Contact"
               className="btn btn-light btn-block indigo"
             />
           </form>
-          {this.props.loading && <Spinner />}
-
-          </div>
+          {loading && <Spinner />}
         </div>
-        <Footer/>
-      </React.Fragment>
-    )
-  }
-}
+      </div>
+      <Footer />
+    </React.Fragment>
+  );
+};
 EditComment.propTypes = {
   comment: PropTypes.object.isRequired,
-  getComment: PropTypes.func.isRequired
+  getComment: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   comment: state.comment.comment,
-  loading: state.comment.loading
+  loading: state.comment.loading,
 });
 
-export default connect(
-  mapStateToProps,
-  { getComment, updateComment }
-)(EditComment);
+export default connect(mapStateToProps, { getComment, updateComment })(
+  EditComment
+);
